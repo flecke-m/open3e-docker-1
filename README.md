@@ -1,5 +1,5 @@
 # open3e-docker
-open3e as docker container
+open3e on Docker
 
 This repository contains the Dockerfiles for running open3e in a Docker container. It is split into a container image for the command open3e_depictSystem and open3e. To keep the images as minimal as possible they are based on the official Python Alpine images.
 
@@ -7,12 +7,12 @@ Before running the container images you should follow the best practices to peri
 
 For initially creating the devices.json and the Open3Edatapoints you run the open3depict image:
 
-`sudo docker run -d --name open3edepict --network host -e CLI_ARGS="-c can0" -v ./data:/open3e myimages/open3e-depic`
+`sudo docker run -d --name open3edepict --network host -e CLI_ARGS="-c can0" -v ./data:/open3e fleckem/open3e-depict`
 
 - Network Host is needed, so the container can interact with the CAN-Interface
 - CLI_ARGS is used to handover the open3e_depictSystem CLI_ARGS (e.g. naming of the CAN-Interface)
 - mapping a local volume on the host (e.g. ./data) to have the devices.json and the Open3Edatapoints persistantly stored
-- the image name need to be adjusted, depended how it was named after the build
+- the image name need to be adjusted if it is your own build
 
 After the container has run you need to remove the exited container with `sudo docker rm CONTAINER__ID`
 
@@ -26,9 +26,11 @@ Example of a simple docker compose file for running open3e in Docker:
 services:
   open3e:
     container_name: open3e
-    image: "myimage/open3e:0.1" -> needs to be adjusted according the name of your image build
+    image: "fleckem/open3e"
 	network_mode: "host"
     volumes:
       - "./data/:/open3e/"
     restart: always
 ```
+
+There are Raspberry Pi 4 images available on docker hub `docker pull fleckem/open3e` and `docker pull fleckem/open3e-depict` Please note: this is only an ARM64 image and tested on the Raspberry Pi 4. It might work on other ARM64 based systems.
