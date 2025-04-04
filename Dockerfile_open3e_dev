@@ -1,15 +1,20 @@
 # use dedicated builder image to keep final image clean/small
 # 1. copy python distribution from build context into image
 # 2. install open3e from local distribution in venv, so that the venv can easily be copied to the final image
+
 FROM python:3.12-alpine3.20 AS builder
 RUN apk update && apk add --no-cache git
+
+RUN python -m venv /open3e/.venv
+ENV PATH="/open3e/.venv/bin:$PATH"
+WORKDIR /open3e
 RUN pip install git+https://github.com/open3e/open3e.git
 
 FROM python:3.12-alpine3.20
 
 COPY --from=builder /open3e /open3e
-
 WORKDIR /open3e
+ENV PATH="/open3e/.venv/bin:$PATH"
 
 COPY run.sh /run.sh
 RUN chmod a+x /run.sh
