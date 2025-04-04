@@ -3,9 +3,9 @@
 
 echo "[INFO] Preparing to start...checking for devices.json"
 
-if ! test -f /data/devices.json; then
+if ! test -f /open3e/devices.json; then
     # Read the config file
-    config_file="/data/args"
+    config_file="/open3e/args"
     while IFS= read -r line; do
         case "$line" in
             --can)
@@ -18,10 +18,10 @@ if ! test -f /data/devices.json; then
     done < "$config_file"
 
     echo "[INFO] Running open3e_depictSystem -c $CAN ... This may take a while"
-    cd /data
+    cd /open3e
     open3e_depictSystem -c $CAN
 fi
 
-cd /data
+cd /open3e
 echo "[INFO] Starting Open3e... "
 open3e @args
