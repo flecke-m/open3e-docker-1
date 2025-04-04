@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 echo "[INFO] Preparing to start...checking for devices.json"
@@ -6,15 +6,15 @@ echo "[INFO] Preparing to start...checking for devices.json"
 if ! test -f /open3e/devices.json; then
     # Read the config file
     config_file="/open3e/args"
+    CAN=""
+
+    # Read the file and check for --can
     while IFS= read -r line; do
-        case "$line" in
-            --can)
-                read -r CAN  # Read the next line for the value
-                ;;
-            *)
-                echo "Unknown option: $line"
-                ;;
-        esac
+      if [[ "$line" == *"--can"* ]]; then
+       # Read the next line into a variable
+       IFS= read -r CAN
+       break  # Exit after finding --can
+      fi
     done < "$config_file"
 
     echo "[INFO] Running open3e_depictSystem -c $CAN ... This may take a while"
