@@ -19,5 +19,5 @@ RUN chmod a+x /run.sh
 WORKDIR /open3e
 
 ENV PYTHONUNBUFFERED=1
-ENV PATH="/open3e/.venv/bin:$PATH
+ENV PATH="/open3e/.venv/bin:$PATH"
 CMD [ "/run.sh" ]
